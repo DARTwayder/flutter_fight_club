@@ -2,7 +2,7 @@
 .dart_tool/
 build/
 web/
-android/flutter_fight_club_android.iml/
-flutter_fight_club.iml
+android/flutter_fight_club_android.iml.dart
+flutter_fight_club.iml.dart
 
 .packages
