@@ -1,249 +1,247 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_fight_club/fight_club_colors.dart';
-import 'package:flutter_fight_club/fight_club_images.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_fight_club/main.dart';
-import 'package:collection/collection.dart';
-import 'package:crypto/crypto.dart';
 
-import 'lesson_2/task_1.dart';
-import 'lesson_2/task_2.dart';
-import 'lesson_2/task_3.dart';
-import 'lesson_2/task_4.dart';
-import 'lesson_2/task_5.dart';
-import 'shared/helpers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_fight_club/main.dart';
+import 'package:flutter_fight_club/pages/main_page.dart';
+import 'package:flutter_fight_club/pages/statistics_page.dart';
+import 'package:flutter_fight_club/widgets/secondary_action_button.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'lesson_3/task_1.dart';
+import 'lesson_3/task_2.dart';
+import 'lesson_3/task_3.dart';
+import 'lesson_3/task_4.dart';
+import 'shared/container_checks.dart';
+import 'shared/test_helpers.dart';
+import 'shared/text_checks.dart';
 
 void main() {
-  group("l03h01", () => runTestLesson2Task1());
-  group('l03h02', () => runTestLesson2Task2());
-  group("l03h03", () => runTestLesson2Task3());
-   group('l03h04', () => runTestLesson2Task4());
-   group('l03h05', () => runTestLesson2Task5());
+  group("l04h01", () => runTestLesson3Task1());
+  group("l04h02", () => runTestLesson3Task2());
+   group("l04h03", () => runTestLesson3Task3());
+   group("l04h04", () => runTestLesson3Task4());
 }
-void runTestLesson2Task1() {
+void runTestLesson3Task1() {
   testWidgets('module1', (WidgetTester tester) async {
     await tester.pumpWidget(MyApp());
 
-    final Iterable<Text> allTextsWithGrey = [
-      ...tester.widgetList(find.text("DEFEND")),
-      ...tester.widgetList(find.text("ATTACK")),
-      ...tester.widgetList(find.text("HEAD")),
-      ...tester.widgetList(find.text("TORSO")),
-      ...tester.widgetList(find.text("LEGS")),
-      ...tester.widgetList(find.text("You")),
-      ...tester.widgetList(find.text("Enemy")),
-    ].cast<Text>();
-    final Iterable<Color?> colorsOfTextsWithGrey =
-    allTextsWithGrey.map((e) => e.style?.color).toSet().toList();
+    final containerFinder =
+    findTypeByTextOnlyInParentType(Container, "Statistics".toUpperCase(), Column);
     expect(
-      colorsOfTextsWithGrey.length,
-      1,
-      reason: 'количество уникальных цветов',
-    );
-    expect(
-      colorsOfTextsWithGrey.first,
+      containerFinder,
       isNotNull,
+      reason: "There are should be a Container with text 'STATISTICS' in Column",
+    );
+
+    final Container container = tester.widget<Container>(containerFinder);
+
+    checkContainerEdgeInsetsProperties(
+      container: container,
+      margin: EdgeInsetsCheck(left: 16, right: 16),
+    );
+    checkContainerWidthOrHeightProperties(
+      container: container,
+      widthAndHeight: WidthAndHeight(width: null, height: 40),
+      secondWidthAndHeight: WidthAndHeight(width: double.infinity, height: 40),
+    );
+    checkContainerBorder(
+      container: container,
+      border: Border.all(color: const Color(0xFF161616), width: 2),
+    );
+    expect(
+      container.child,
+      isInstanceOf<Text>(),
+      reason: "Container should have child of Text type",
     );
 
     expect(
-      colorsOfTextsWithGrey.first,
-      const Color(0xFF161616),
+      (container.child as Text).data,
+      "Statistics".toUpperCase(),
+      reason: "Text should uppercased text",
     );
 
-    final Iterable<Text> allTextsWithWhite = [
-      ...tester.widgetList(find.text("GO")),
-    ].cast<Text>();
-    final List<Color?> colorsOfTextsWithWhite =
-    allTextsWithWhite.map((e) => e.style?.color).toSet().toList();
-    expect(colorsOfTextsWithWhite.length, 1);
-    expect(colorsOfTextsWithWhite.first, isNotNull);
-
-    expect(
-      colorsOfTextsWithWhite.first,
-      isOneOrAnother(const Color(0xDDFFFFFF), const Color(0xDEFFFFFF)),
+    checkTextProperties(
+      textWidget: container.child as Text,
+      textColor: const Color(0xFF161616),
     );
   });
 }
-
-
-void runTestLesson2Task2() {
+void runTestLesson3Task2() {
   testWidgets('module2', (WidgetTester tester) async {
-    expect(
-      FightClubColors.background,
-      const Color.fromRGBO(213, 222, 240, 1),
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SecondaryActionButton(onTap: () {}, text: "Statistics"),
+        ),
+      ),
     );
-    expect(
-      FightClubColors.greyButton,
-      isOneOrAnother(Colors.black38, Color(0x60000000)),
+
+    final containerFinder = findTypeByTextOnlyInParentType(
+        Container, "Statistics".toUpperCase(), SecondaryActionButton);
+
+    final Container container = tester.widget<Container>(containerFinder);
+
+    checkContainerEdgeInsetsProperties(
+      container: container,
+      margin: EdgeInsetsCheck(left: 16, right: 16),
     );
-    expect(
-      FightClubColors.blueButton,
-      Color(0xFF1C79CE),
+    checkContainerWidthOrHeightProperties(
+      container: container,
+      widthAndHeight: WidthAndHeight(width: null, height: 40),
+      secondWidthAndHeight: WidthAndHeight(width: double.infinity, height: 40),
     );
-    expect(
-      FightClubColors.blackButton,
-      isOneOrAnother(Colors.black87, Color(0xDE000000)),
+    checkContainerAlignment(
+      container: container,
+      alignment: Alignment.center,
     );
-    expect(
-      FightClubColors.darkGreyText,
-      Color(0xFF161616),
+    checkContainerBorder(
+      container: container,
+      border: Border.all(color: const Color(0xFF161616), width: 2),
     );
 
     expect(
-      FightClubColors.whiteText,
-      isOneOrAnother(Color(0xDDFFFFFF), Color(0xDEFFFFFF)),
+      container.child,
+      isInstanceOf<Text>(),
+      reason: "Container should have child of Text type",
     );
-  });
-}
 
+    expect(
+      (container.child as Text).data,
+      "Statistics".toUpperCase(),
+      reason: "Text should uppercased text",
+    );
 
-void runTestLesson2Task3() {
-  testWidgets('module3', (WidgetTester tester) async {
+    expect(
+      (container.child as Text).style,
+      isNotNull,
+      reason: "Text should have not null style",
+    );
+
+    checkTextProperties(
+      textWidget: container.child as Text,
+      textColor: const Color(0xFF161616),
+    );
+
     await tester.pumpWidget(MyApp());
-    final List<Row> rowWidgets = tester
-        .widgetList<Row>(find.descendant(of: find.byType(FightersInfo), matching: find.byType(Row)))
-        .toList();
-    final Row? rowWithTwoChildren = rowWidgets.firstWhereOrNull((e) => e.children.length == 2);
-    expect(rowWithTwoChildren, isNotNull, reason: "Cannot find Row with needed colors");
-    expect(rowWithTwoChildren!.crossAxisAlignment, CrossAxisAlignment.stretch);
+
+    final secondaryActionButtonFinder =
+    findTypeByTextOnlyInParentType(SecondaryActionButton, "Statistics".toUpperCase(), Column);
     expect(
-      rowWithTwoChildren.children[0],
-      isInstanceOf<Expanded>(),
-    );
-    expect(
-      (rowWithTwoChildren.children[0] as Expanded).child,
-      isInstanceOf<ColoredBox>(),
-    );
-    expect(
-      ((rowWithTwoChildren.children[0] as Expanded).child as ColoredBox).color,
-      Colors.white,
+      secondaryActionButtonFinder,
+      findsOneWidget,
+      reason: "There are should be a SecondaryActionButton\n"
+          "with text 'STATISTICS' in a top-level Column",
     );
 
+    final gestureDetectorFinder = findTypeByTextOnlyInParentType(
+        GestureDetector, "Statistics".toUpperCase(), SecondaryActionButton);
     expect(
-      rowWithTwoChildren.children[1],
-      isInstanceOf<Expanded>(),
-    );
-    expect(
-      (rowWithTwoChildren.children[1] as Expanded).child,
-      isInstanceOf<ColoredBox>(),
-    );
-    expect(
-      ((rowWithTwoChildren.children[1] as Expanded).child as ColoredBox).color,
-      Color(0xFFC5D1EA),
+      gestureDetectorFinder,
+      findsOneWidget,
+      reason: "There are should be a GestureDetector inside SecondaryActionButton",
     );
   });
 }
-
-
-void runTestLesson2Task4() {
+void runTestLesson3Task4() {
   testWidgets('module4', (WidgetTester tester) async {
-    void _testSizedBox(SizedBox sizedBox) {
-      expect(sizedBox.width, double.infinity);
-    }
-
-    void _testPadding(Padding padding) {
-      expect((padding.padding as EdgeInsets).left, 16);
-      expect((padding.padding as EdgeInsets).right, 16);
-    }
-
-    void _testColoredBox(ColoredBox coloredBox) {
-      expect(coloredBox.color, const Color(0xFFC5D1EA));
-    }
-
-    await tester.pumpWidget(MyApp());
-    final SafeArea safeArea = tester.widget<SafeArea>(find.byType(SafeArea));
-    expect(safeArea.child, isInstanceOf<Column>());
-
-    final Column topLevelColumn = safeArea.child as Column;
-    final Widget? possiblyExpanded =
-    topLevelColumn.children.firstWhereOrNull((element) => element is Expanded);
-    expect(possiblyExpanded, isNotNull);
-    expect(possiblyExpanded, isInstanceOf<Expanded>());
-    final Expanded expanded = possiblyExpanded as Expanded;
-
-    if (expanded.child is SizedBox) {
-      final SizedBox sizedBox = expanded.child as SizedBox;
-
-      _testSizedBox(sizedBox);
-
-      expect(sizedBox.child, isInstanceOf<Padding>());
-      final Padding padding = sizedBox.child as Padding;
-      _testPadding(padding);
-
-      expect(padding.child, isInstanceOf<ColoredBox>());
-      _testColoredBox(padding.child as ColoredBox);
-    } else {
-      expect(expanded.child, isInstanceOf<Padding>());
-      final Padding padding = expanded.child as Padding;
-      _testPadding(padding);
-
-      if (padding.child is SizedBox) {
-        final SizedBox sizedBox = padding.child as SizedBox;
-        _testSizedBox(sizedBox);
-
-        expect(sizedBox.child, isInstanceOf<ColoredBox>());
-        _testColoredBox(sizedBox.child as ColoredBox);
-      } else {
-        expect(padding.child, isInstanceOf<ColoredBox>());
-        final ColoredBox coloredBox = padding.child as ColoredBox;
-        _testColoredBox(coloredBox);
-
-        expect(coloredBox.child, isInstanceOf<SizedBox>());
-
-        _testSizedBox(coloredBox.child as SizedBox);
-      }
-    }
-  });
-}
-void runTestLesson2Task5() {
-  testWidgets('module5', (WidgetTester tester) async {
-    final String youAvatarPath = "assets/images/you-avatar.png";
-    final String enemyAvatarPath = "assets/images/enemy-avatar.png";
-
-    final yourData = await rootBundle.load(youAvatarPath);
-    final yourBuffer = yourData.buffer;
-    final yourBytes = yourBuffer.asUint8List(yourData.offsetInBytes, yourData.lengthInBytes);
-    final yourMd5checksum = md5.convert(yourBytes);
-    expect(yourMd5checksum.toString(), "b740ac516bd8fb9950654185ce9241c4");
-
-    final enemiesData = await rootBundle.load(enemyAvatarPath);
-    final enemiesBuffer = enemiesData.buffer;
-    final enemiesBytes =
-    enemiesBuffer.asUint8List(enemiesData.offsetInBytes, enemiesData.lengthInBytes);
-    final enemiesMd5checksum = md5.convert(enemiesBytes);
-    expect(enemiesMd5checksum.toString(), "98855f71fa4fd927e3789adebcddaf73");
-
-    expect(FightClubImages.youAvatar, youAvatarPath);
-    expect(FightClubImages.enemyAvatar, enemyAvatarPath);
-
     await tester.pumpWidget(MyApp());
 
-    final youImageFinder = assetImageByPathFinder(youAvatarPath);
-    expect(youImageFinder, findsOneWidget);
-    final Image youImage = tester.widget(youImageFinder);
-    expect(youImage.image, isInstanceOf<AssetImage>());
-    expect((youImage.image as AssetImage).assetName, youAvatarPath);
+    final secondaryActionButtonFinder =
+    findTypeByTextOnlyInParentType(SecondaryActionButton, "Statistics".toUpperCase(), Column);
 
-    final enemyImageFinder = assetImageByPathFinder(enemyAvatarPath);
-    expect(enemyImageFinder, findsOneWidget);
-    final Image enemyImage = tester.widget(enemyImageFinder);
-    expect(enemyImage.image, isInstanceOf<AssetImage>());
-    expect((enemyImage.image as AssetImage).assetName, enemyAvatarPath);
-  });
-}
+    expect(
+      find.byType(MainPage),
+      findsOneWidget,
+      reason: "First page should be MainPage",
+    );
 
-Finder assetImageByPathFinder(final String path) {
-  return find.byWidgetPredicate((widget) {
-    if (widget is! Image) {
-      return false;
-    }
-    final provider = widget.image;
-    if (provider is ExactAssetImage) {
-      return provider.assetName == path;
-    } else if (provider is AssetImage) {
-      return provider.assetName == path;
-    }
-    return false;
+    expect(
+      secondaryActionButtonFinder,
+      findsOneWidget,
+      reason: "There are should be a SecondaryActionButton with text 'Statistics' in Column",
+    );
+
+    await tester.tap(secondaryActionButtonFinder);
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byType(StatisticsPage),
+      findsOneWidget,
+      reason: "Statistics should be opened after tap on 'STATISTICS' button",
+    );
+    final columnFinder = findTypeByTextOnlyInParentType(Column, "Statistics", StatisticsPage);
+
+    expect(
+      columnFinder,
+      findsOneWidget,
+      reason: "There should be a Column widget",
+    );
+
+    final Column column = tester.widget(columnFinder);
+
+    expect(
+      column.children.first,
+      isInstanceOf<Container>(),
+      reason: "First widget in Column should be Container",
+    );
+
+    final containerWithTitle = column.children.first as Container;
+
+    checkContainerEdgeInsetsProperties(
+      container: containerWithTitle,
+      paddingOrMargin: EdgeInsetsCheck(top: 24),
+    );
+
+    expect(
+      containerWithTitle.child,
+      isInstanceOf<Text>(),
+      reason: "Container's child should be of Text type",
+    );
+
+    checkTextProperties(
+      textWidget: containerWithTitle.child as Text,
+      text: "Statistics",
+      textColor: const Color(0xFF161616),
+      fontSize: 24,
+    );
+
+    final Widget lastWidgetInColumn = column.children.last;
+    expect(
+      lastWidgetInColumn,
+      isInstanceOf<Padding>(),
+      reason: "Last widget in Column should have type of Padding",
+    );
+    expect(
+      (lastWidgetInColumn as Padding).padding,
+      isInstanceOf<EdgeInsets>(),
+      reason: "Padding should have padding property type of EdgeInsets",
+    );
+    expect(
+      (lastWidgetInColumn.padding as EdgeInsets).bottom,
+      16,
+      reason: "Padding should have bottom padding of 16",
+    );
+    expect(lastWidgetInColumn.child, isNotNull, reason: "Padding should have not null child");
+
+    final Widget paddingChild = lastWidgetInColumn.child!;
+    expect(
+      paddingChild,
+      isInstanceOf<SecondaryActionButton>(),
+      reason: "Padding's child should have type of SecondaryActionButton",
+    );
+    final SecondaryActionButton secondaryActionButton = paddingChild as SecondaryActionButton;
+    expect(
+      secondaryActionButton.text,
+      "Back",
+      reason: "SecondaryActionButton should have text 'Back'",
+    );
+
+    await tester.tap(find.text("BACK"));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byType(MainPage),
+      findsOneWidget,
+      reason: "After tapping on Back we should be return to the MainPage",
+    );
   });
 }
