@@ -22,6 +22,9 @@ class StatisticsPage extends StatelessWidget {
                     fontSize: 24, color: FightClubColors.darkGreyText)),
           ),
           const Expanded(child: SizedBox.shrink()),
+
+
+
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: SecondaryActionButton(

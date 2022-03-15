@@ -13,10 +13,10 @@ class FightPage extends StatefulWidget {
   const FightPage({Key? key}) : super(key: key);
 
   @override
-  State<FightPage> createState() => MyHomePageState();
+  FightPageState createState() => FightPageState();
 }
 
-class MyHomePageState extends State<FightPage> {
+class FightPageState extends State<FightPage> {
   static const maxLives = 5;
 
   BodyPart? defendingBodyPart;
