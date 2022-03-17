@@ -8,24 +8,23 @@ import '../resources/fight_club_images.dart';
 class FightResultWidget extends StatelessWidget {
   final FightResult fightResult;
 
-  const FightResultWidget({Key? key,required this.fightResult}) : super(key: key);
-
-
+  const FightResultWidget({Key? key, required this.fightResult})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-     return SizedBox(
+    return SizedBox(
       height: 140,
       child: Stack(
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
+            children: const  [
               Expanded(
                   child: ColoredBox(
-                    color: Colors.white,
-                  )),
-              Expanded(
+                color: Colors.white,
+              )),
+               Expanded(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
@@ -39,9 +38,8 @@ class FightResultWidget extends StatelessWidget {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-
               Column(
                 children: [
                   const SizedBox(height: 16),
@@ -53,17 +51,19 @@ class FightResultWidget extends StatelessWidget {
                   Image.asset(FightClubImages.youAvatar, height: 92, width: 92),
                 ],
               ),
-              const SizedBox(
+              Container(
                 height: 44,
-                width: 44,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: FightClubColors.blueButton,
+                padding:const  EdgeInsets.symmetric(horizontal: 14,vertical: 4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color:fightResult.color,
+                    borderRadius:BorderRadius.circular(22)
+
+              ),
+                child: Center(
+                  child: Text(fightResult.result.toLowerCase(),
+                      style: const TextStyle(color: Colors.white, fontSize: 16)
                   ),
-                  child: Center(
-                      child: Text("vs",
-                          style: TextStyle(color: Colors.white, fontSize: 16))),
                 ),
               ),
               Column(
@@ -78,7 +78,6 @@ class FightResultWidget extends StatelessWidget {
                       height: 92, width: 92),
                 ],
               ),
-
             ],
           ),
         ],
@@ -86,5 +85,3 @@ class FightResultWidget extends StatelessWidget {
     );
   }
 }
-
-

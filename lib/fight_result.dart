@@ -1,11 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_fight_club/resources/fight_club_colors.dart';
+
 class FightResult {
   final String result;
+final Color color;
+  const FightResult._(this.result,this.color);
 
-  const FightResult._(this.result);
+  static const won = FightResult._("Won",FightClubColors.green);
+  static const lost = FightResult._("Lost",FightClubColors.red);
+  static const draw = FightResult._("Draw",FightClubColors.blueButton);
+static const values = [won,lost,draw];
 
-  static const won = FightResult._("Won");
-  static const lost = FightResult._("Lost");
-  static const draw = FightResult._("Draw");
+  static FightResult getByName(final String name) {
+    return values.firstWhere((fightResult) => fightResult.result == name);
+
+  }
+
 
   static FightResult? calculateResult(
       final int yourLives, final int enemysLives) {

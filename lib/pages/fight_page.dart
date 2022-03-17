@@ -13,7 +13,7 @@ class FightPage extends StatefulWidget {
   const FightPage({Key? key}) : super(key: key);
 
   @override
-  FightPageState createState() => FightPageState();
+  State<FightPage> createState() => FightPageState();
 }
 
 class FightPageState extends State<FightPage> {
@@ -105,15 +105,19 @@ class FightPageState extends State<FightPage> {
         if (youLoseLife) {
           yourLives -= 1;
         }
+
         final FightResult? fightResult =
             FightResult.calculateResult(yourLives, enemysLives);
-        if (enemysLives == 0 || yourLives == 0) {
-          if (fightResult != null) {
-            SharedPreferences.getInstance().then((sharedPreferences) {
-              sharedPreferences.setString(
-                  "last_fight_result", fightResult.result);
-            });
-          }
+        if (fightResult != null) {
+          SharedPreferences.getInstance().then((sharedPreferences) {
+            sharedPreferences.setString(
+                "last_fight_result", fightResult.result);
+            final String key = "stats_${fightResult.result.toLowerCase()}";
+            final int currentValue = sharedPreferences
+                    .getInt(key) ??
+                0;
+            sharedPreferences.setInt(key, currentValue +1);
+          });
         }
 
         centerText = _calculateCenterText(youLoseLife, enemyLoseLife);
